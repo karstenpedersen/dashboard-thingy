@@ -2,28 +2,32 @@ import {
   Breadcrumb,
   BreadcrumbEllipsis,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Route } from "@/consts/routeUtils";
-import { Fragment, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { HOME_ROUTE } from "@/consts/routes/routes";
+import useRouteMetadata from "@/hooks/useRouteMetadata";
+import { Fragment } from "react";
 import BreadcrumbEntry from "./BreadcrumbEntry";
 
 export default function Breadcrumbs() {
-  const [crumbs, _] = useState<Route[]>([HOME_ROUTE]);
-
+  const { crumbs } = useRouteMetadata();
   const lastTwoCrumbs = crumbs.slice(-2);
 
   return (
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbEntry route={HOME_ROUTE} />
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbEllipsis />
-        </BreadcrumbItem>
+        {crumbs.length > 2 ? (
+          <>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbEllipsis />
+            </BreadcrumbItem>
+          </>
+        ) : (
+          <></>
+        )}
         {lastTwoCrumbs.map((crumb) => (
           <Fragment key={crumb.path}>
             <BreadcrumbSeparator />

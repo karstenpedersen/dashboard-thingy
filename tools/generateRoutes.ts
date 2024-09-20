@@ -1,16 +1,11 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as ts from "typescript";
+import { RouteObject } from "react-router-dom";
 import {
-  ComponentElementAsString,
   ROUTES,
   RouteAsString,
   UnpackedRouteAsString,
-} from "./routes_config";
-import { RouteObject } from "react-router-dom";
-import { IconName } from "../icons";
-import { describe } from "node:test";
-import { Description } from "@radix-ui/react-dialog";
+} from "../src/consts/routes/routes_config";
 
 export type RouteObjectAsStrings = {
   path: string;
@@ -84,7 +79,8 @@ function transformNestedRoutes(nestedRoutes: RouteAsString[]): {
   };
 }
 
-function compile(input: string, output: string) {
+function compile(output: string) {
+  console.log("Starting to transform routes.");
   const { routes, browserRoutes, imports, routePaths, individualRoutes } =
     transformNestedRoutes(ROUTES);
 
@@ -124,9 +120,9 @@ const BROWSER_ROUTES = [
 ${browserRoutes.map((route) => JSON.stringify(route)).join(",\n")}
 ];`;
 
+  console.log(`Wrote to file: ${output}`);
   fs.writeFileSync(output, code);
 }
 
-const input = path.resolve(__dirname, "routes_config.ts");
 const output = path.resolve(__dirname, "routes.ts");
-compile(input, output);
+compile(output);

@@ -9,8 +9,12 @@ import {
 import { useSelector } from "react-redux";
 import { StoreState } from "@/store/store";
 import Icon from "./Icon";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
+import loadRouteCommands from "@/consts/routes/routeCommands";
+import { useAppSelector } from "@/hooks/redux";
+import { DialogTitle } from "@radix-ui/react-dialog";
+import VisuallyHidden from "./VisuallyHidden";
 
 interface Props {
   open: boolean;
@@ -18,8 +22,8 @@ interface Props {
 }
 
 export default function CommandPalette({ open, setOpen }: Props) {
-  const commands = useSelector((state: StoreState) => state.commands.commands);
-  const hotkeys = useSelector((state: StoreState) => state.settings.hotkeys);
+  const commands = useAppSelector((state) => state.commands.commands);
+  const hotkeys = useAppSelector((state) => state.userSettings.hotkeys);
 
   useHotkeys(hotkeys.commandPalette, () => {
     setOpen(!open);
@@ -27,6 +31,9 @@ export default function CommandPalette({ open, setOpen }: Props) {
 
   return (
     <CommandDialog open={open} onOpenChange={(value) => setOpen(value)}>
+      <VisuallyHidden>
+        <DialogTitle>Command Palette</DialogTitle>
+      </VisuallyHidden>
       <CommandInput placeholder="Type a command or search..." />
       <CommandList>
         <CommandGroup>

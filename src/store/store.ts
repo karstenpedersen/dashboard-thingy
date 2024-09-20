@@ -1,10 +1,14 @@
-import { configureStore } from "@reduxjs/toolkit";
-import settingsReducer from "@/store/settingsReducer";
-import commandsReducer from "@/store/commandsReducer";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import themeReducer from "@/store/themeSlice";
+import hotkeyReducer from "@/store/hotkeySlice";
+import commandsReducer from "@/store/commandsSlice";
 
 const store = configureStore({
   reducer: {
-    settings: settingsReducer,
+    userSettings: combineReducers({
+      theme: themeReducer,
+      hotkeys: hotkeyReducer,
+    }),
     commands: commandsReducer,
   },
 });

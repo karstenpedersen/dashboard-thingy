@@ -1,17 +1,23 @@
 import { Button } from "@/components/ui/button";
-import { toggleTheme } from "@/store/settingsReducer";
-import { StoreState } from "@/store/store";
+import { THEME_MODE_LOCAL_STORAGE } from "@/consts/localStorageConsts";
+import { ThemeMode } from "@/types/settingsTypes";
+import { useLocalStorage } from "@uidotdev/usehooks";
 import { LuMoon, LuSun } from "react-icons/lu";
-import { useDispatch, useSelector } from "react-redux";
 
-export default function Root() {
-  const theme = useSelector((state: StoreState) => state.settings.theme);
-  const dispatch = useDispatch();
+export default function ThemeSwitcher() {
+  const [mode, setMode] = useLocalStorage<ThemeMode>(
+    THEME_MODE_LOCAL_STORAGE,
+    "light"
+  );
 
   return (
-    <Button onClick={() => dispatch(toggleTheme())}>
-			{theme === "light" ? <LuSun className="h-4 w-4" /> : <></>}
-			{theme === "dark" ? <LuMoon className="h-4 w-4" /> : <></>}
+    <Button
+      variant="link"
+      className="px-2"
+      onClick={() => setMode(mode === "light" ? "dark" : "light")}
+    >
+      {mode === "light" ? <LuSun className="h-5 w-5" /> : <></>}
+      {mode === "dark" ? <LuMoon className="h-5 w-5" /> : <></>}
     </Button>
   );
 }

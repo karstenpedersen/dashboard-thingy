@@ -1,11 +1,11 @@
 import Logo from "@/components/custom/Logo";
-import Breadcrumbs from "./Breadcrumbs";
-import { ReactNode } from "react";
-import SearchBar from "./SearchBar";
 import { Button } from "@/components/ui/button";
-import { Link, Outlet } from "react-router-dom";
-import { LuSettings } from "react-icons/lu";
-import { LuLogOut } from "react-icons/lu";
+import { ReactNode } from "react";
+import { LuLogOut, LuSettings } from "react-icons/lu";
+import { Link } from "react-router-dom";
+import Breadcrumbs from "./Breadcrumbs";
+import SearchBar from "./SearchBar";
+import ThemeSwitcher from "../ThemeSwitcher";
 
 interface Props {
   children?: ReactNode;
@@ -13,8 +13,8 @@ interface Props {
 
 export default function DashboardLayout({ children }: Props) {
   return (
-    <div className="min-h-dvh">
-      <header className="flex flex-row items-center border-b justify-between h-16 bg-background px-4">
+    <div className="min-h-dvh flex flex-col">
+      <header className="flex flex-row items-center overflow-hidden border-b justify-between h-16 bg-background px-4">
         <div className="flex flex-row items-center gap-6">
           <Logo />
           <Breadcrumbs />
@@ -22,6 +22,7 @@ export default function DashboardLayout({ children }: Props) {
         <div className="flex flex-row items-center gap-6">
           <SearchBar />
           <nav className="flex flex-row items-center gap-2">
+            <ThemeSwitcher />
             <Button variant="link" className="px-2" asChild>
               <Link to="/settings">
                 <LuSettings className="w-5 h-5" />
@@ -35,7 +36,9 @@ export default function DashboardLayout({ children }: Props) {
           </nav>
         </div>
       </header>
-      <main>{children}</main>
+      <main id="main" className="py-3 px-4 flex-1">
+        {children}
+      </main>
     </div>
   );
 }

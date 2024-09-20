@@ -1,7 +1,13 @@
-import Home from "@/routes/home";
+import HomePage from "@/routes/home";
 import { z } from "zod";
 import { IconName } from "@/consts/icons";
 import { ReactNode } from "react";
+import { TranslationKey } from "@/types/i18next";
+import { RouteObject } from "react-router-dom";
+import RootPage from "@/routes/root";
+import ErrorPage from "@/routes/error-page";
+import SettingsPage from "@/routes/settings";
+import LoginPage from "@/routes/login";
 
 export const ROUTE_PATHS = ["/", "/login", "/home", "/settings"] as const;
 const routePathEnum = z.enum(ROUTE_PATHS);
@@ -9,8 +15,8 @@ export type RoutePath = z.infer<typeof routePathEnum>;
 
 export type Route = {
   path: RoutePath;
-  title: string;
-  description: string;
+  title: TranslationKey;
+  description: TranslationKey;
   element: ReactNode;
   errorElement?: ReactNode;
   children?: Route[];
@@ -19,12 +25,58 @@ export type Route = {
 
 export const HOME_ROUTE: Route = {
   path: "/home",
-  title: "common.routes.home.title",
-  description: "common.routes.home.description",
-  element: <Home />,
+  title: "routes.home.title",
+  description: "routes.home.description",
+  element: <HomePage />,
   icon: "home",
 };
 
-const ROUTES: Route[] = [];
+export const SETTINGS_ROUTE: Route = {
+  path: "/settings",
+  title: "routes.settings.title",
+  description: "routes.settings.description",
+  element: <SettingsPage />,
+  icon: "settings",
+};
 
-export default ROUTES;
+const ROUTES: Record<RoutePath, Route> = {
+  "/": HOME_ROUTE,
+  "/home": HOME_ROUTE,
+  "/settings": HOME_ROUTE,
+  "/login": HOME_ROUTE,
+} as const;
+
+export const BROWSER_ROUTES: RouteObject[] = [
+  {
+    path: "/",
+    element: <RootPage />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "home",
+        element: <HomePage />,
+      },
+      {
+        path: "settings",
+        element: <SettingsPage />,
+      },
+    ],
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+    errorElement: <ErrorPage />,
+  },
+];
+
+export function isRoutePath(path: string): path is RoutePath {
+  return path in ROUTE_PATHS;
+}
+
+export function getRoutes(): Route[] {
+  return Object.values(ROUTES);
+}
+
+export function getRoute(path: RoutePath): Route {
+  return ROUTES[path];
+}
