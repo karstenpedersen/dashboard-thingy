@@ -1,4 +1,9 @@
+import useCommandsStore from "@/store/commandsStore";
+import useHotkeyStore from "@/store/hotkeyStore";
+import { DialogTitle } from "@radix-ui/react-dialog";
 import { CommandEmpty } from "cmdk";
+import { Dispatch, SetStateAction } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 import {
   CommandDialog,
   CommandGroup,
@@ -6,14 +11,7 @@ import {
   CommandItem,
   CommandList,
 } from "../ui/command";
-import { useSelector } from "react-redux";
-import { StoreState } from "@/store/store";
 import Icon from "./Icon";
-import { Dispatch, SetStateAction, useEffect } from "react";
-import { useHotkeys } from "react-hotkeys-hook";
-import loadRouteCommands from "@/consts/routes/routeCommands";
-import { useAppSelector } from "@/hooks/redux";
-import { DialogTitle } from "@radix-ui/react-dialog";
 import VisuallyHidden from "./VisuallyHidden";
 
 interface Props {
@@ -22,8 +20,8 @@ interface Props {
 }
 
 export default function CommandPalette({ open, setOpen }: Props) {
-  const commands = useAppSelector((state) => state.commands.commands);
-  const hotkeys = useAppSelector((state) => state.userSettings.hotkeys);
+  const { commands } = useCommandsStore();
+  const { hotkeys } = useHotkeyStore();
 
   useHotkeys(hotkeys.commandPalette, () => {
     setOpen(!open);

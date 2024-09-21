@@ -20,7 +20,7 @@ export const HOTKEYS = ["commandPalette"] as const;
 const hotkeyEnum = z.enum(HOTKEYS);
 const hotkeySchema = z.record(hotkeyEnum, z.string());
 export type Hotkey = z.infer<typeof hotkeyEnum>;
-export type HotkeyMap = z.infer<typeof hotkeySchema>;
+export type HotkeyMap = Record<Hotkey, string>;
 
 // Combine user settings
 const userSettingsSchema = z.object({
